@@ -1,15 +1,15 @@
 module i2s_tx #(
-    parameter pdata_width = 32
+    parameter PDATA_WIDTH = 32
 ) (
     input wire rst,
 
     input wire sclk_in,
     input wire lrck_in,
 
-    input wire [pdata_width - 1 : 0] pldata_in,
-    input wire [pdata_width - 1 : 0] prdata_in,
+    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
+    input wire [PDATA_WIDTH - 1 : 0] prdata_in,
 
-    output reg sdata_out
+    output wire sdata_out
 );
 
     // LRCK delayed by 1 SCLK cyle
@@ -32,7 +32,9 @@ module i2s_tx #(
         end
 
     // LRCK pulse
-    wire lrck_p_int = lrck_d1_int ^ lrck_d2_int;
+    wire lrck_p_int;
+
+    assign lrck_p_int = lrck_d1_int ^ lrck_d2_int;
 
     // Select channel
     reg pdata_int;
@@ -40,9 +42,28 @@ module i2s_tx #(
     always @(lrck_d1_int, pldata_in, prdata_in)
         begin
             if (lrck_d1_int)
-                pdata_int <= prdata_in;
+                pdata_int = prdata_in;
             else
-                pdata_int <= pldata_in;
+                pdata_int = pldata_in;
         end
+
+    // PISO (Parallel-In, Serial-Out)
+    reg [PDATA_WIDTH - 1 : 0] piso_int;
+
+    always @(sclk_in)
+        begin
+            if (rst)
+                piso_int <= { PDATA_WIDTH { 1'b0 } };
+            else
+                begin
+                    if (lrck_p_int)
+                        piso_int <= pdata_int;
+                    else
+                        piso_int <= { piso_int[PDATA_WIDTH - 1 : 1], 1'b0 };
+                end
+        end
+
+    // Serial data
+    assign sdata_out = piso_int[PDATA_WIDTH - 1 : PDATA_WIDTH - 1];
 
 endmodule
