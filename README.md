@@ -10,9 +10,10 @@
 
 | Name      | Description                         |
 | --------- | ----------------------------------- |
+| ./constrs | Constraints                         |
+| ./ds      | Datasheets                          |
 | ./hdl     | Verilog and VHDL sources            |
 | ./inc     | C and C++ headers                   |
 | ./ip      | Intellectual property               |
-| ./src     | C and C++ sources                   |
 | ./sim     | Verilog and VHDL simulation sources |
-| ./constrs | Constraints                         |
+| ./src     | C and C++ sources                   |

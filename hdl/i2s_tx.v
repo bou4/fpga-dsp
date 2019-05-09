@@ -34,4 +34,15 @@ module i2s_tx #(
     // LRCK pulse
     wire lrck_p_int = lrck_d1_int ^ lrck_d2_int;
 
+    // Select channel
+    reg pdata_int;
+
+    always @(lrck_d1_int, pldata_in, prdata_in)
+        begin
+            if (lrck_d1_int)
+                pdata_int <= prdata_in;
+            else
+                pdata_int <= pldata_in;
+        end
+
 endmodule
