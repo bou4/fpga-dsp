@@ -8,11 +8,11 @@
 
 ### Folders
 
-| Name  | Description                        |
-| ----- | ---------------------------------- |
-| ./hdl | Verilog and VHDL sources           |
-| ./inc | C and C++ headers                  |
-| ./ip  | Intellectual property              |
-| ./src | C and C++ sources                  |
-| ./tb  | Verilog and VHDL testbench sources |
-| ./xdc | Constraints                        |
+| Name      | Description                         |
+| --------- | ----------------------------------- |
+| ./hdl     | Verilog and VHDL sources            |
+| ./inc     | C and C++ headers                   |
+| ./ip      | Intellectual property               |
+| ./src     | C and C++ sources                   |
+| ./sim     | Verilog and VHDL simulation sources |
+| ./constrs | Constraints                         |
