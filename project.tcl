@@ -14,6 +14,6 @@ set_property board_part em.avnet.com:minized:part0:1.2 [current_project]
 ################################################################
 add_files [glob ./hdl/*.v]
 
-add_files -fileset sim_1 [glob ./tb/*.v]
+add_files -fileset sim_1 [glob ./sim/*.v]
 
 add_files -fileset constrs_1 [glob ./constrs/*.xdc]

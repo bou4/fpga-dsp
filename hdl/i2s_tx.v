@@ -1,7 +1,7 @@
 module i2s_tx #(
     parameter PDATA_WIDTH = 32
 ) (
-    input wire rst,
+    input wire rst_in,
 
     input wire sclk_in,
     input wire lrck_in,
@@ -19,7 +19,7 @@ module i2s_tx #(
 
     always @(posedge sclk_in)
         begin
-            if (rst)
+            if (rst_in)
                 begin
                     lrck_d1_int <= 1'b0;
                     lrck_d2_int <= 1'b0;
@@ -37,7 +37,7 @@ module i2s_tx #(
     assign lrck_p_int = lrck_d1_int ^ lrck_d2_int;
 
     // Select channel
-    reg pdata_int;
+    reg [PDATA_WIDTH - 1 : 0] pdata_int;
 
     always @(lrck_d1_int, pldata_in, prdata_in)
         begin
@@ -50,16 +50,16 @@ module i2s_tx #(
     // PISO (Parallel-In, Serial-Out)
     reg [PDATA_WIDTH - 1 : 0] piso_int;
 
-    always @(sclk_in)
+    always @(negedge sclk_in)
         begin
-            if (rst)
+            if (rst_in)
                 piso_int <= { PDATA_WIDTH { 1'b0 } };
             else
                 begin
                     if (lrck_p_int)
                         piso_int <= pdata_int;
                     else
-                        piso_int <= { piso_int[PDATA_WIDTH - 1 : 1], 1'b0 };
+                        piso_int <= { piso_int[PDATA_WIDTH - 2 : 0], 1'b0 };
                 end
         end
 
