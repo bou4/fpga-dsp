@@ -3,8 +3,8 @@ module i2s_tx #(
 ) (
     input wire rst_in,
 
-    input wire sclk_in,
     input wire lrck_in,
+    input wire sclk_in,
 
     input wire [PDATA_WIDTH - 1 : 0] pldata_in,
     input wire [PDATA_WIDTH - 1 : 0] prdata_in,
