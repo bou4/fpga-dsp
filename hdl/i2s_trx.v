@@ -10,10 +10,15 @@ module i2s_trx #(
     output wire lrck_out,
     output wire sclk_out,
 
-    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
-    input wire [PDATA_WIDTH - 1 : 0] prdata_in,
+    input wire sdata_in,
 
-    output wire sdata_out
+    output wire [PDATA_WIDTH - 1 : 0] pldata_out,
+    output wire [PDATA_WIDTH - 1 : 0] prdata_out,
+
+    output wire sdata_out,
+
+    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
+    input wire [PDATA_WIDTH - 1 : 0] prdata_in
 );
 
     wire lrck_int;
@@ -32,17 +37,26 @@ module i2s_trx #(
         .sclk_out (sclk_int)
     );
 
+    i2s_rx #(
+        .PDATA_WIDTH (PDATA_WIDTH)
+    ) i2s_rx_inst (
+        .rst_in (rst_in),
+        .lrck_in (lrck_int),
+        .sclk_in (sclk_int),
+        .sdata_in (sdata_in),
+        .pldata_out (pldata_out),
+        .prdata_out (prdata_out)
+    );
+
     i2s_tx #(
         .PDATA_WIDTH (PDATA_WIDTH)
     ) i2s_tx_inst (
     	.rst_in (rst_in),
         .lrck_in (lrck_int),
         .sclk_in (sclk_int),
+        .sdata_out (sdata_out),
         .pldata_in (pldata_in),
-        .prdata_in (prdata_in),
-        .sdata_out (sdata_out)
+        .prdata_in (prdata_in)
     );
-
-    i2s_rx i2s_rx_inst ();
 
 endmodule

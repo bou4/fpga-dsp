@@ -6,10 +6,10 @@ module i2s_tx #(
     input wire lrck_in,
     input wire sclk_in,
 
-    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
-    input wire [PDATA_WIDTH - 1 : 0] prdata_in,
+    output wire sdata_out,
 
-    output wire sdata_out
+    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
+    input wire [PDATA_WIDTH - 1 : 0] prdata_in
 );
 
     // LRCK delayed by 1 SCLK cyle
