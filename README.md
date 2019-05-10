@@ -10,6 +10,7 @@
 
 | Name      | Description                         |
 | --------- | ----------------------------------- |
+| ./bd      | Block designs                       |
 | ./constrs | Constraints                         |
 | ./ds      | Datasheets                          |
 | ./hdl     | Verilog and VHDL sources            |
