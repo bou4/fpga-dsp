@@ -1,4 +1,4 @@
-`timescale 1ns / 1ns
+`timescale 1ns / 1ps
 
 module cordic_tb #(
     parameter WIDTH = 32,
@@ -39,7 +39,8 @@ module cordic_tb #(
 
     always
         begin
-            #10 z_0 = z_0 + 32'b10000000000000000000000000;
+            // Sample rate of 48 kHz results in sine of 440 Hz
+            #20833.333 z_0 = z_0 + 32'b00000010010110001011111100100101;
         end
 
 endmodule

@@ -78,3 +78,6 @@ for i in range(0, 31):
 
 # Print x_0
 print("x_0 = 32'b{}".format(np.binary_repr(binaryMagnitude(1 / calculateGain(31)), 32)))
+
+# Calculate phase increment for sine of 440 Hz if sampled at 48 kHz
+print("delta phi = 32'b{}".format(np.binary_repr(binaryPhase(2 * np.pi * 440 / 48000), 32)))
