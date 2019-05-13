@@ -75,3 +75,6 @@ f = open("scripts/data/arctan.mem", "w+")
 
 for i in range(0, 31):
     f.write("{}\n".format(np.binary_repr(lookupTable(i), 32)))
+
+# Print x_0
+print("x_0 = 32'b{}".format(np.binary_repr(binaryMagnitude(1 / calculateGain(31)), 32)))

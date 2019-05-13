@@ -77,5 +77,6 @@ module cordic #(
 
     assign x_n = x[ITERATIONS - 1];
     assign y_n = y[ITERATIONS - 1];
+    assign z_n = z[ITERATIONS - 1];
 
 endmodule

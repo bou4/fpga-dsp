@@ -13,6 +13,7 @@ set_property board_part em.avnet.com:minized:part0:1.2 [current_project]
 # Setup design sources and constraints
 ################################################################
 add_files [glob ./hdl/*.v]
+add_files [glob ./scripts/data/*.mem]
 
 add_files -fileset sim_1 [glob ./sim/*.v]
 
