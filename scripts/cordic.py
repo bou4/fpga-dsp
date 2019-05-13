@@ -54,7 +54,7 @@ def cordic(x, y, z, iterations):
 
 # Calculate cosine via CORDIC
 def binaryCos(z):
-    iterations = 30
+    iterations = 31
 
     x = binaryMagnitude(1 / calculateGain(iterations))
     y = 0
@@ -63,9 +63,15 @@ def binaryCos(z):
 
 # Calculate sine via CORDIC
 def binarySin(z):
-    iterations = 30
+    iterations = 31
 
     x = binaryMagnitude(1 / calculateGain(iterations))
     y = 0
 
     return cordic(x, y, z, iterations)[1]
+
+# Export CORDIC arctan table
+f = open("scripts/data/arctan.mem", "w+")
+
+for i in range(0, 31):
+    f.write("{}\n".format(np.binary_repr(lookupTable(i), 32)))

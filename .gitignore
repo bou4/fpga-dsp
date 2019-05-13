@@ -7,3 +7,5 @@
 /.Xil/
 
 /project/
+
+__pycache__/
