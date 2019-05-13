@@ -5,15 +5,23 @@ import numpy as np
 def binaryMagnitude(magnitude):
     return np.int32(magnitude * 2 ** 31)
 
+# Convert 32-bit value to magnitude in range [-1, 1)
+def floatMagnitude(magnitude):
+    return magnitude / 2 ** 31
+
 # Convert phase in range [-pi, pi) to 32-bit value
 def binaryPhase(phase):
     return np.int32(phase / np.pi * 2 ** 31)
 
+# Convert 32-bit value to phase in range [-pi, pi)
+def floatPhase(phase):
+    return phase * np.pi / 2 ** 31
+
 # Calculate gain of CORDIC algorithm
-def calculateGain(n):
+def calculateGain(iterations):
     A = np.sqrt(2)
 
-    for i in range(1, n):
+    for i in range(1, iterations):
         A = A * np.sqrt(1 + 2 ** (-2 * i))
 
     return A
@@ -43,3 +51,21 @@ def cordic(x, y, z, iterations):
         current_z = next_z
 
     return current_x, current_y, current_z
+
+# Calculate cosine via CORDIC
+def binaryCos(z):
+    iterations = 30
+
+    x = binaryMagnitude(1 / calculateGain(iterations))
+    y = 0
+
+    return cordic(x, y, z, iterations)[0]
+
+# Calculate sine via CORDIC
+def binarySin(z):
+    iterations = 30
+
+    x = binaryMagnitude(1 / calculateGain(iterations))
+    y = 0
+
+    return cordic(x, y, z, iterations)[1]
