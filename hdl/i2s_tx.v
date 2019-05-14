@@ -1,7 +1,7 @@
 module i2s_tx #(
     parameter PDATA_WIDTH = 32
 ) (
-    input wire rst_in,
+    input wire arstn_in,
 
     input wire lrck_in,
     input wire sclk_in,
@@ -17,9 +17,9 @@ module i2s_tx #(
     // LRCK delayed by 2 SCLK cycles
     reg lrck_d2_int;
 
-    always @(posedge sclk_in)
+    always @(posedge sclk_in, negedge arstn_in)
         begin
-            if (rst_in)
+            if (arstn_in == 1'b0)
                 begin
                     lrck_d1_int <= 1'b0;
                     lrck_d2_int <= 1'b0;
@@ -50,9 +50,9 @@ module i2s_tx #(
     // PISO (Parallel-In, Serial-Out)
     reg [PDATA_WIDTH - 1 : 0] piso_int;
 
-    always @(negedge sclk_in)
+    always @(negedge sclk_in, negedge arstn_in)
         begin
-            if (rst_in)
+            if (arstn_in == 1'b0)
                 piso_int <= { PDATA_WIDTH { 1'b0 } };
             else
                 begin

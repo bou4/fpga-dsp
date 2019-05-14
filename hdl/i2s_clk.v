@@ -2,7 +2,7 @@ module i2s_clk #(
     parameter MCLK_DIV_LRCK = 256,
     parameter MCLK_DIV_SCLK = 4
 ) (
-    input wire rst_in,
+    input wire arstn_in,
 
     input wire mclk_in,
 
@@ -13,9 +13,9 @@ module i2s_clk #(
     // MCLK_DIV_LRCK is maximally 2 ** 10
     reg [10 : 0] lrck_cnt_int;
 
-    always @(posedge mclk_in)
+    always @(posedge mclk_in, negedge arstn_in)
         begin
-            if (rst_in)
+            if (arstn_in == 1'b0)
                 lrck_cnt_int <= 0;
             else
                 begin
@@ -31,9 +31,9 @@ module i2s_clk #(
     // MCLK_DIV_SCLK is maximally 2 ** 10
     reg [10 : 0] sclk_cnt_int;
 
-    always @(posedge mclk_in)
+    always @(posedge mclk_in, negedge arstn_in)
         begin
-            if (rst_in)
+            if (arstn_in == 1'b0)
                 sclk_cnt_int <= 0;
             else
                 begin
