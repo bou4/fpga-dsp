@@ -1,7 +1,7 @@
 module i2s_rx #(
     parameter PDATA_WIDTH = 32
 ) (
-    input wire rst_in,
+    input wire arstn_in,
 
     input wire lrck_in,
     input wire sclk_in,
