@@ -37,16 +37,16 @@ module i2s_trx #(
         .sclk_out (sclk_int)
     );
 
-//    i2s_rx #(
-//        .PDATA_WIDTH (PDATA_WIDTH)
-//    ) i2s_rx_inst (
-//        .arstn_in (arstn_in),
-//        .lrck_in (lrck_int),
-//        .sclk_in (sclk_int),
-//        .sdata_in (sdata_in),
-//        .pldata_out (pldata_out),
-//        .prdata_out (prdata_out)
-//    );
+   i2s_rx #(
+       .PDATA_WIDTH (PDATA_WIDTH)
+   ) i2s_rx_inst (
+       .arstn_in (arstn_in),
+       .lrck_in (lrck_int),
+       .sclk_in (sclk_int),
+       .sdata_in (sdata_in),
+       .pldata_out (pldata_out),
+       .prdata_out (prdata_out)
+   );
 
     i2s_tx #(
         .PDATA_WIDTH (PDATA_WIDTH)

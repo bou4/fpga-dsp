@@ -53,13 +53,13 @@ module i2s_tx #(
     always @(negedge sclk_in, negedge arstn_in)
         begin
             if (arstn_in == 1'b0)
-                piso_int <= { PDATA_WIDTH { 1'b0 } };
+                piso_int <= {PDATA_WIDTH {1'b0}};
             else
                 begin
                     if (lrck_p_int)
                         piso_int <= pdata_int;
                     else
-                        piso_int <= { piso_int[PDATA_WIDTH - 2 : 0], 1'b0 };
+                        piso_int <= {piso_int[PDATA_WIDTH - 2 : 0], 1'b0};
                 end
         end
 
