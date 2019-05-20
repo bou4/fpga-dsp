@@ -50,7 +50,6 @@ module i2s_trx #(
     i2s_tx #(
         .PDATA_WIDTH (PDATA_WIDTH)
     ) i2s_tx_inst (
-    	.arstn_in (arstn_in),
         .lrck_in (lrck_int),
         .sclk_in (sclk_int),
         .sdata_out (sdata_out),
