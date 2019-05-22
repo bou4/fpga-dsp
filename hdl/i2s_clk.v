@@ -14,17 +14,13 @@ module i2s_clk #(
     reg [10 : 0] lrck_cnt_int;
 
     always @(posedge mclk_in, negedge arstn_in)
-        begin
-            if (arstn_in == 1'b0)
+        if (arstn_in == 1'b0)
+            lrck_cnt_int <= 0;
+        else
+            if (lrck_cnt_int == MCLK_DIV_LRCK - 1)
                 lrck_cnt_int <= 0;
             else
-                begin
-                    if (lrck_cnt_int == MCLK_DIV_LRCK - 1)
-                        lrck_cnt_int <= 0;
-                    else
-                        lrck_cnt_int <= lrck_cnt_int + 1;
-                end
-        end
+                lrck_cnt_int <= lrck_cnt_int + 1;
 
     assign lrck_out = (lrck_cnt_int < MCLK_DIV_LRCK / 2) ? 1'b0 : 1'b1;
 
@@ -32,17 +28,13 @@ module i2s_clk #(
     reg [10 : 0] sclk_cnt_int;
 
     always @(posedge mclk_in, negedge arstn_in)
-        begin
-            if (arstn_in == 1'b0)
+        if (arstn_in == 1'b0)
+            sclk_cnt_int <= 0;
+        else
+            if (sclk_cnt_int == MCLK_DIV_SCLK - 1)
                 sclk_cnt_int <= 0;
             else
-                begin
-                    if (sclk_cnt_int == MCLK_DIV_SCLK - 1)
-                        sclk_cnt_int <= 0;
-                    else
-                        sclk_cnt_int <= sclk_cnt_int + 1;
-                end
-        end
+                sclk_cnt_int <= sclk_cnt_int + 1;
 
     assign sclk_out = (sclk_cnt_int < MCLK_DIV_SCLK / 2) ? 1'b0 : 1'b1;
 

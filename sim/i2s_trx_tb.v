@@ -4,7 +4,7 @@ module i2s_trx_tb #(
     parameter PDATA_WIDTH = 32
 ) ();
 
-    reg rst_int;
+    reg arstn_int;
 
     reg mclk_int;
 
@@ -26,7 +26,7 @@ module i2s_trx_tb #(
         .MCLK_DIV_SCLK (4),
         .PDATA_WIDTH (32)
     ) i2s_trx_inst (
-        .rst_in (rst_int),
+        .arstn_in (arstn_int),
         .mclk_in (mclk_int),
         .lrck_out (lrck_int),
         .sclk_out (sclk_int),
@@ -41,9 +41,9 @@ module i2s_trx_tb #(
     // Generate RST
     initial
         begin
-            rst_int = 1'b1;
+            arstn_int = 1'b0;
 
-            #20 rst_int = 1'b0;
+            #20 arstn_int = 1'b1;
         end
 
     // Generate MCLK
@@ -63,8 +63,11 @@ module i2s_trx_tb #(
     // Assign TX parallel data
     initial
         begin
-            tx_pldata_int = { PDATA_WIDTH { 1'b0 } };
-            tx_prdata_int = { PDATA_WIDTH { 1'b0 } };
+            tx_pldata_int = 32'b0;
+            tx_prdata_int = 32'b0;
         end
+
+    always @(posedge lrck_int)
+        tx_pldata_int <= tx_pldata_int + 32'b1;
 
 endmodule
