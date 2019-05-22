@@ -1,4 +1,4 @@
-module i2s_trx #(
+module i2s #(
     parameter MCLK_DIV_LRCK = 256,
     parameter MCLK_DIV_SCLK = 4,
     parameter PDATA_WIDTH = 32

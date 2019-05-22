@@ -28,7 +28,7 @@ module i2s_tx #(
     // Get input parallel data
     reg [PDATA_WIDTH - 1 : 0] pdata_int;
 
-    always @(lrck_d1_int, pldata_in, prdata_in)
+    always @(*)
         if (lrck_d1_int)
             pdata_int = prdata_in;
         else

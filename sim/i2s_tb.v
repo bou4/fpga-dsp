@@ -1,6 +1,6 @@
 `timescale 1ns / 1ns
 
-module i2s_trx_tb #(
+module i2s_tb #(
     parameter PDATA_WIDTH = 32
 ) ();
 
@@ -21,11 +21,11 @@ module i2s_trx_tb #(
     reg [PDATA_WIDTH - 1 : 0] tx_pldata_int;
     reg [PDATA_WIDTH - 1 : 0] tx_prdata_int;
 
-    i2s_trx #(
+    i2s #(
         .MCLK_DIV_LRCK (256),
         .MCLK_DIV_SCLK (4),
         .PDATA_WIDTH (32)
-    ) i2s_trx_inst (
+    ) i2s_inst (
         .arstn_in (arstn_int),
         .mclk_in (mclk_int),
         .lrck_out (lrck_int),
