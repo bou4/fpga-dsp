@@ -1,49 +1,52 @@
 module i2s_tx #(
-    parameter PDATA_WIDTH = 32
+    parameter WIDTH = 32
 ) (
-    input wire lrck_in,
-    input wire sclk_in,
+    input wire lrck,
+    input wire sclk,
 
-    output wire sdata_out,
+    output wire sdout,
 
-    input wire [PDATA_WIDTH - 1 : 0] pldata_in,
-    input wire [PDATA_WIDTH - 1 : 0] prdata_in
+    input wire [WIDTH - 1 : 0] pldin,
+    input wire [WIDTH - 1 : 0] prdin
 );
     // LRCK delayed by 1 SCLK cyle
-    reg lrck_d1_int;
+    reg lrck_d1;
     // LRCK delayed by 2 SCLK cycles
-    reg lrck_d2_int;
+    reg lrck_d2;
 
-    always @(posedge sclk_in)
-        begin
-            lrck_d1_int <= lrck_in;
-            lrck_d2_int <= lrck_d1_int;
-        end
+    always @(posedge sclk) begin
+        lrck_d1 <= lrck;
+        lrck_d2 <= lrck_d1;
+    end
 
     // LRCK pulse
-    wire lrck_p_int;
+    wire lrck_p;
 
-    assign lrck_p_int = lrck_d1_int ^ lrck_d2_int;
+    assign lrck_p = lrck_d1 ^ lrck_d2;
 
     // Get input parallel data
-    reg [PDATA_WIDTH - 1 : 0] pdata_int;
+    reg [WIDTH - 1 : 0] pdata;
 
-    always @(*)
-        if (lrck_d1_int)
-            pdata_int = prdata_in;
-        else
-            pdata_int = pldata_in;
+    always @(*) begin
+        if (lrck_d1) begin
+            pdata = prdin;
+        end else begin
+            pdata = pldin;
+        end
+    end
 
     // Shift input parallel data
-    reg [PDATA_WIDTH - 1 : 0] piso_int;
+    reg [WIDTH - 1 : 0] piso;
 
-    always @(negedge sclk_in)
-        if (lrck_p_int)
-            piso_int <= pdata_int;
-        else
-            piso_int <= {piso_int[PDATA_WIDTH - 2 : 0], 1'b0};
+    always @(negedge sclk) begin
+        if (lrck_p) begin
+            piso <= pdata;
+        end else begin
+            piso <= {piso[WIDTH - 2 : 0], 1'b0};
+        end
+    end
 
     // Set output serial data
-    assign sdata_out = piso_int[PDATA_WIDTH - 1 : PDATA_WIDTH - 1];
+    assign sdout = piso[WIDTH - 1 : WIDTH - 1];
 
 endmodule

@@ -1,54 +1,60 @@
 module i2s_rx #(
-    parameter PDATA_WIDTH = 32
+    parameter WIDTH = 32
 ) (
-    input wire lrck_in,
-    input wire sclk_in,
+    input wire lrck,
+    input wire sclk,
 
-    input wire sdata_in,
+    input wire sdin,
 
-    output reg [PDATA_WIDTH - 1 : 0] pldata_out,
-    output reg [PDATA_WIDTH - 1 : 0] prdata_out
+    output reg [WIDTH - 1 : 0] pldout,
+    output reg [WIDTH - 1 : 0] prdout
 );
     // LRCK delayed by 1 SCLK cyle
-    reg lrck_d1_int;
+    reg lrck_d1;
     // LRCK delayed by 2 SCLK cycles
-    reg lrck_d2_int;
+    reg lrck_d2;
 
-    always @(posedge sclk_in)
-        begin
-            lrck_d1_int <= lrck_in;
-            lrck_d2_int <= lrck_d1_int;
-        end
+    always @(posedge sclk) begin
+        lrck_d1 <= lrck;
+        lrck_d2 <= lrck_d1;
+    end
 
     // LRCK pulse
-    wire lrck_p_int;
+    wire lrck_p;
 
-    assign lrck_p_int = lrck_d1_int ^ lrck_d2_int;
+    assign lrck_p = lrck_d1 ^ lrck_d2;
 
     // Count bits
-    reg [5 : 0] cnt_int;
+    reg [5 : 0] cnt;
 
-    always @(negedge sclk_in)
-        if (lrck_p_int)
-            cnt_int <= 6'b0;
-        else
-            cnt_int <= cnt_int + 6'b1;
+    always @(negedge sclk) begin
+        if (lrck_p) begin
+            cnt <= 6'b0;
+        end else begin
+            cnt <= cnt + 6'b1;
+        end
+    end
 
     // Get input serial data
-    reg [0 : PDATA_WIDTH - 1] pdata_int;
+    reg [WIDTH - 1 : 0] pdata;
 
-    always @(posedge sclk_in)
-        if (lrck_p_int)
-            pdata_int <= {PDATA_WIDTH {1'b0}};
-        else if (cnt_int < PDATA_WIDTH)
-            pdata_int[cnt_int] <= sdata_in;
+    always @(posedge sclk) begin
+        if (lrck_p) begin
+            pdata <= {WIDTH {1'b0}};
+        end else if (cnt < WIDTH) begin
+            pdata[(WIDTH - 1) - cnt] <= sdin;
+        end
+    end
 
     // Set output parallel data
-    always @(posedge sclk_in)
-        if (lrck_p_int)
-            if (lrck_d1_int)
-                prdata_out <= pdata_int;
-            else
-                pldata_out <= pdata_int;
+    always @(negedge sclk) begin
+        if (lrck_p) begin
+            if (lrck_d1) begin
+                prdout <= pdata;
+            end else begin
+                pldout <= pdata;
+            end
+        end
+    end
 
 endmodule

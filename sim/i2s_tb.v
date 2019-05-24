@@ -1,73 +1,67 @@
 `timescale 1ns / 1ns
 
-module i2s_tb #(
-    parameter PDATA_WIDTH = 32
-) ();
+module i2s_tb ();
+    reg arstn;
 
-    reg arstn_int;
+    reg mclk;
 
-    reg mclk_int;
+    wire lrck;
+    wire sclk;
 
-    wire lrck_int;
-    wire sclk_int;
+    wire sdin;
 
-    wire rx_sdata_int;
+    wire [31 : 0] pldout;
+    wire [31 : 0] prdout;
 
-    wire [PDATA_WIDTH - 1 : 0] rx_pldata_int;
-    wire [PDATA_WIDTH - 1 : 0] rx_prdata_int;
+    wire sdout;
 
-    wire tx_sdata_int;
-
-    reg [PDATA_WIDTH - 1 : 0] tx_pldata_int;
-    reg [PDATA_WIDTH - 1 : 0] tx_prdata_int;
+    reg [31 : 0] pldin;
+    reg [31 : 0] prdin;
 
     i2s #(
         .MCLK_DIV_LRCK (256),
         .MCLK_DIV_SCLK (4),
-        .PDATA_WIDTH (32)
+        .WIDTH         (32)
     ) i2s_inst (
-        .arstn_in (arstn_int),
-        .mclk_in (mclk_int),
-        .lrck_out (lrck_int),
-        .sclk_out (sclk_int),
-        .sdata_in (rx_sdata_int),
-        .pldata_out (rx_pldata_int),
-        .prdata_out (rx_prdata_int),
-        .sdata_out (tx_sdata_int),
-        .pldata_in (tx_pldata_int),
-        .prdata_in (tx_prdata_int)
+        .arstn  (arstn),
+        .mclk   (mclk),
+        .lrck   (lrck),
+        .sclk   (sclk),
+        .sdin   (sdin),
+        .pldout (pldout),
+        .prdout (prdout),
+        .sdout  (sdout),
+        .pldin  (pldin),
+        .prdin  (prdin)
     );
 
     // Generate RST
-    initial
-        begin
-            arstn_int = 1'b0;
+    initial begin
+        arstn = 1'b0;
 
-            #20 arstn_int = 1'b1;
-        end
+        #20 arstn = 1'b1;
+    end
 
     // Generate MCLK
-    initial
-        begin
-            mclk_int = 1'b0;
-        end
+    initial begin
+        mclk = 1'b0;
+    end
 
-    always
-        begin
-            #10 mclk_int = ~mclk_int;
-        end
+    always begin
+        #10 mclk = ~mclk;
+    end
 
     // Loopback
-    assign rx_sdata_int = tx_sdata_int;
+    assign sdin = sdout;
 
     // Assign TX parallel data
-    initial
-        begin
-            tx_pldata_int = 32'b0;
-            tx_prdata_int = 32'b0;
-        end
+    initial begin
+        pldin = 32'b0;
+        prdin = 32'b0;
+    end
 
-    always @(posedge lrck_int)
-        tx_pldata_int <= tx_pldata_int + 32'b1;
+    always @(posedge lrck) begin
+        pldin <= pldin + 32'b1;
+    end
 
 endmodule
