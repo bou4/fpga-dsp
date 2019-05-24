@@ -37,15 +37,15 @@ module i2s #(
         .sclk  (sclk_b)
     );
 
-   i2s_rx #(
+    i2s_rx #(
         .WIDTH (WIDTH)
-   ) i2s_rx_inst (
+    ) i2s_rx_inst (
         .lrck   (lrck_b),
         .sclk   (sclk_b),
         .sdin   (sdin),
         .pldout (pldout),
         .prdout (prdout)
-   );
+    );
 
     i2s_tx #(
         .WIDTH (WIDTH)
